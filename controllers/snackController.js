@@ -1,7 +1,6 @@
 const express = require("express");
 const snacks = express.Router();
 const { createSnack, deleteSnack, getAllSnacks } = require("../queries/snacks");
-const { createSnack, getAllSnacks, deleteSnack } = require("../queries/snacks");
 
 // INDEX
 snacks.get("/", async (req, res) => {
