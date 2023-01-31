@@ -21,17 +21,21 @@ snacks.get("/", async (req, res) => {
 snacks.post("/", async (req, res) => {
   try {
     const snack = await createSnack(req.body);
-    res.status(200).json(snack);
+    res.status(201).json(snack);
   } catch (error) {
-    res.status(400).json({ error });
+    res.status(400).json({ error: "Bad Request" });
   }
 });
 
 // UPDATE
 snacks.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const snack = await updateSnack(id, req.body);
-  res.status(200).json(snack);
+  try {
+    const snack = await updateSnack(id, req.body);
+    res.status(200).json(snack);
+  } catch (error) {
+    res.status(400).json({ error: "Bad Request" });
+  }
 });
 
 //DELETE
