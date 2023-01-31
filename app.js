@@ -1,6 +1,7 @@
 // DEPENDENCIES
 const express = require("express");
 const cors = require("cors");
+const snackController = require("./controllers/snackController");
 
 // CONFIGURATION
 const app = express();
@@ -13,6 +14,9 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send("Welcome to Snack-A-Log");
 });
+
+// SNACKS ROUTE
+app.use("/snacks", snackController);
 
 // 404 Page
 app.get("*", (req, res) => {
