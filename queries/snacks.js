@@ -1,5 +1,18 @@
 const db = require("../db/dbConfig.js");
 
+
+//DELETE A SNACK
+const deleteSnack = async (id) => {
+    try {
+        const deletedSnack = await db.one(
+            "DELETE FROM snacks WHERE id=$1 *", id
+        )
+        return deletedSnack;
+    }catch(error) {
+        return error;
+    }
+  };
+
 // CREATE NEW SNACK
 const createSnack = async (snack) => {
   // id, name, fiber, protein, added_sugar, is_healthy, image
@@ -13,6 +26,7 @@ const createSnack = async (snack) => {
   } catch (error) {
     throw error;
   }
+
 };
 
-module.exports = { createSnack };
+module.exports = { createSnack, deleteSnack };
