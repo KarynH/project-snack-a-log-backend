@@ -10,18 +10,6 @@ const getAllSnacks = async () => {
   }
 };
 
-//DELETE A SNACK
-const deleteSnack = async (id) => {
-  try {
-    const deletedSnack = await db.one(
-      "DELETE FROM snacks WHERE id=$1 RETURNING *",
-      id
-    );
-    return deletedSnack;
-  } catch (error) {
-    return error;
-  }
-};
 
 // CREATE NEW SNACK
 const createSnack = async (snack) => {
@@ -38,4 +26,17 @@ const createSnack = async (snack) => {
   }
 };
 
-module.exports = { createSnack, getAllSnacks, deleteSnack };
+//DELETE A SNACK
+const deleteSnack = async (id) => {
+    try {
+        const deletedSnack = await db.one(
+            "DELETE FROM snacks WHERE id=$1 RETURNING *", id
+        )
+        return deletedSnack;
+    }catch(error) {
+        return error;
+    }
+  };
+
+module.exports = { createSnack, deleteSnack, getAllSnacks };
+
