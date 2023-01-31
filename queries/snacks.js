@@ -10,7 +10,6 @@ const getAllSnacks = async () => {
   }
 };
 
-
 // CREATE NEW SNACK
 const createSnack = async (snack) => {
   // id, name, fiber, protein, added_sugar, is_healthy, image

@@ -33,4 +33,27 @@ snacks.delete("/:id", async (req, res) => {
     }
   
 })
+
+//SHOW
+snacks.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  const snack = await getAllSnack(id);
+  if (snack.id) {
+    res.status(200).json(snack);
+  } else {
+    res.status(404).json({ error: "Snack not found" });
+  }
+});
+
+// // SHOW
+// snacks.get("/:id", async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const snack = await db.one("SELECT * FROM snacks WHERE id=$1", id);
+//     res.status(200).json(snack);
+//   } catch (error) {
+//     res.status(404).json({ error: "Snack not found" });
+//   }
+// });
+
 module.exports = snacks;
