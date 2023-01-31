@@ -1,5 +1,15 @@
 const db = require("../db/dbConfig.js");
 
+// SHOW ALL SNACKS
+const getAllSnacks = async () => {
+  try {
+    const allSnacks = await db.any("SELECT * FROM snacks");
+    return allSnacks;
+  } catch (error) {
+    return error;
+  }
+};
+
 // CREATE NEW SNACK
 const createSnack = async (snack) => {
   // id, name, fiber, protein, added_sugar, is_healthy, image
@@ -15,4 +25,4 @@ const createSnack = async (snack) => {
   }
 };
 
-module.exports = { createSnack };
+module.exports = { createSnack, getAllSnacks };
