@@ -1,6 +1,11 @@
 const express = require("express");
 const snacks = express.Router();
-const { createSnack, deleteSnack, getAllSnacks } = require("../queries/snacks");
+const {
+  createSnack,
+  updateSnack,
+  deleteSnack,
+  getAllSnacks,
+} = require("../queries/snacks");
 
 // INDEX
 snacks.get("/", async (req, res) => {
@@ -16,25 +21,24 @@ snacks.get("/", async (req, res) => {
 snacks.post("/", async (req, res) => {
   try {
     const snack = await createSnack(req.body);
-    res.json(snack);
+    res.status(201).json(snack);
   } catch (error) {
-    res.status(400).json({ error });
+    res.status(400).json({ error: "Bad Request" });
   }
 });
 
-//DELETE
-snacks.delete("/:id", async (req, res) => {
-  const {id} = req.params;
-  const deletedSnack = await deleteSnack(id)
-    if(deletedSnack.id) {
-      res.status(200).json(deletedSnack)
-    }else {
-      res.status(404).json({error: "snack not found"})
-    }
-  
-})
+// UPDATE
+snacks.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const snack = await updateSnack(id, req.body);
+    res.status(200).json(snack);
+  } catch (error) {
+    res.status(400).json({ error: "Bad Request" });
+  }
+});
 
-//SHOW
+// SHOW
 snacks.get("/:id", async (req, res) => {
   const { id } = req.params;
   const snack = await getAllSnack(id);
@@ -45,15 +49,15 @@ snacks.get("/:id", async (req, res) => {
   }
 });
 
-// // SHOW
-// snacks.get("/:id", async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const snack = await db.one("SELECT * FROM snacks WHERE id=$1", id);
-//     res.status(200).json(snack);
-//   } catch (error) {
-//     res.status(404).json({ error: "Snack not found" });
-//   }
-// });
+// DELETE
+snacks.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  const deletedSnack = await deleteSnack(id);
+  if (deletedSnack.id) {
+    res.status(200).json(deletedSnack);
+  } else {
+    res.status(404).json({ error: "snack not found" });
+  }
+});
 
 module.exports = snacks;
