@@ -32,7 +32,7 @@ snacks.put("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const snack = await updateSnack(id, req.body);
-    res.status(200).json(snack);
+    res.status(201).json(snack);
   } catch (error) {
     res.status(400).json({ error: "Bad Request" });
   }
