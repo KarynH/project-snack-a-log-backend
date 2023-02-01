@@ -42,8 +42,10 @@ const createSnack = async (snack) => {
         formatString(name),
         fiber,
         protein,
-        added_sugar,
-        image,
+        added_sugar ? added_sugar : 0,
+        image
+          ? image
+          : "https://dummyimage.com/400x400/6e6c6e/e9e9f5.png&text=No+Image",
         isHealthy(added_sugar, protein, fiber),
       ]
     );
@@ -63,9 +65,11 @@ const updateSnack = async (id, snack) => {
         formatString(name),
         fiber,
         protein,
-        added_sugar,
+        added_sugar ? added_sugar : 0,
         isHealthy(added_sugar, protein, fiber),
-        image,
+        image
+          ? image
+          : "https://dummyimage.com/400x400/6e6c6e/e9e9f5.png&text=No+Image",
         id,
       ]
     );

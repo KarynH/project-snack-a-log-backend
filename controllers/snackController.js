@@ -43,7 +43,7 @@ snacks.put("/:id", async (req, res) => {
 snacks.get("/:id", async (req, res) => {
   const { id } = req.params;
   const snack = await getOneSnack(id);
-  if (snack.id) {
+  if (snack) {
     res.status(200).json(snack);
   } else {
     res.status(404).json({ error: "Snack not found" });
