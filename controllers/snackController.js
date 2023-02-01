@@ -38,7 +38,18 @@ snacks.put("/:id", async (req, res) => {
   }
 });
 
-//DELETE
+// SHOW
+snacks.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  const snack = await getAllSnack(id);
+  if (snack.id) {
+    res.status(200).json(snack);
+  } else {
+    res.status(404).json({ error: "Snack not found" });
+  }
+});
+
+// DELETE
 snacks.delete("/:id", async (req, res) => {
   const { id } = req.params;
   const deletedSnack = await deleteSnack(id);
