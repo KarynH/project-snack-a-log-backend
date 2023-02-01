@@ -7,6 +7,10 @@ function formatString(string) {
   );
 }
 
+function isHealthy(sugar, protein, fiber) {
+  return sugar < 5 && (protein > 5 || fiber > 5);
+}
+
 // SHOW ALL SNACKS
 const getAllSnacks = async () => {
   try {
@@ -17,14 +21,31 @@ const getAllSnacks = async () => {
   }
 };
 
+// SHOW ONE SNACK
+const getOneSnack = async (id) => {
+  try {
+    const oneSnack = await db.oneOrNone("SELECT * FROM snacks WHERE id=$1", id);
+    return oneSnack;
+  } catch (error) {
+    return error;
+  }
+};
+
 // CREATE NEW SNACK
 const createSnack = async (snack) => {
   // id, name, fiber, protein, added_sugar, is_healthy, image
-  const { name, fiber, protein, added_sugar, is_healthy, image } = snack;
+  const { name, fiber, protein, added_sugar, image } = snack;
   try {
     const newSnack = await db.one(
-      "INSERT INTO snacks (name, fiber, protein, added_sugar, is_healthy, image) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-      [formatString(name), fiber, protein, added_sugar, is_healthy, image]
+      "INSERT INTO snacks (name, fiber, protein, added_sugar, image, is_healthy) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [
+        formatString(name),
+        fiber,
+        protein,
+        added_sugar,
+        image,
+        isHealthy(added_sugar, protein, fiber),
+      ]
     );
     return newSnack;
   } catch (error) {
@@ -34,11 +55,19 @@ const createSnack = async (snack) => {
 
 // UPDATE A SNACK
 const updateSnack = async (id, snack) => {
-  const { name, fiber, protein, added_sugar, is_healthy, image } = snack;
+  const { name, fiber, protein, added_sugar, image } = snack;
   try {
     const updatedSnack = await db.one(
       "UPDATE snacks SET name=$1, fiber=$2, protein=$3, added_sugar=$4, is_healthy=$5, image=$6 WHERE id=$7 RETURNING *",
-      [formatString(name), fiber, protein, added_sugar, is_healthy, image, id]
+      [
+        formatString(name),
+        fiber,
+        protein,
+        added_sugar,
+        isHealthy(added_sugar, protein, fiber),
+        image,
+        id,
+      ]
     );
     return updatedSnack;
   } catch (error) {
@@ -59,4 +88,10 @@ const deleteSnack = async (id) => {
   }
 };
 
-module.exports = { createSnack, updateSnack, deleteSnack, getAllSnacks };
+module.exports = {
+  createSnack,
+  updateSnack,
+  deleteSnack,
+  getAllSnacks,
+  getOneSnack,
+};
