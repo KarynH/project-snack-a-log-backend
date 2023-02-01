@@ -5,6 +5,7 @@ const {
   updateSnack,
   deleteSnack,
   getAllSnacks,
+  getOneSnack,
 } = require("../queries/snacks");
 
 // INDEX
@@ -41,7 +42,7 @@ snacks.put("/:id", async (req, res) => {
 // SHOW
 snacks.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const snack = await getAllSnack(id);
+  const snack = await getOneSnack(id);
   if (snack.id) {
     res.status(200).json(snack);
   } else {

@@ -8,7 +8,7 @@ function formatString(string) {
 }
 
 function isHealthy(sugar, protein, fiber) {
-  return sugar < 5 && protein > 5 && fiber > 5;
+  return sugar < 5 && (protein > 5 || fiber > 5);
 }
 
 // SHOW ALL SNACKS
@@ -16,6 +16,16 @@ const getAllSnacks = async () => {
   try {
     const allSnacks = await db.any("SELECT * FROM snacks");
     return allSnacks;
+  } catch (error) {
+    return error;
+  }
+};
+
+// SHOW ONE SNACK
+const getOneSnack = async (id) => {
+  try {
+    const oneSnack = await db.oneOrNone("SELECT * FROM snacks WHERE id=$1", id);
+    return oneSnack;
   } catch (error) {
     return error;
   }
@@ -78,4 +88,10 @@ const deleteSnack = async (id) => {
   }
 };
 
-module.exports = { createSnack, updateSnack, deleteSnack, getAllSnacks };
+module.exports = {
+  createSnack,
+  updateSnack,
+  deleteSnack,
+  getAllSnacks,
+  getOneSnack,
+};
