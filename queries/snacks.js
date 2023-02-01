@@ -2,9 +2,9 @@ const db = require("../db/dbConfig.js");
 
 // FORMAT SNACK NAME
 function formatString(string) {
-  return string.replace(/(^\w{1})|(\s+\w{1})/g, (letter) =>
-    letter.toUpperCase()
-  );
+  return string
+    .toLowerCase()
+    .replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
 }
 
 function isHealthy(sugar, protein, fiber) {
