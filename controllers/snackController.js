@@ -8,6 +8,27 @@ const {
   getOneSnack,
 } = require("../queries/snacks");
 
+const Jimp = require("jimp");
+
+// MIDDLEWARE
+async function imgResize(req, res, next) {
+  // const buffer = Buffer.from(req.body.image, "base64");
+  const result = await Jimp.read(req.body.image);
+  console.log(
+    `Original image size: ${result.getWidth()} x ${result.getHeight()}`
+  );
+
+  if (result.getWidth() > 300 || result.getWidth() > 300) {
+    await result.resize(300, 300);
+    // result.scaleToFit(300, 300);
+    console.log(
+      `Resized image size: ${result.getWidth()} x ${result.getHeight()}`
+    );
+  }
+  req.body.image_b64 = await result.getBase64Async(Jimp.AUTO);
+  next();
+}
+
 // INDEX
 snacks.get("/", async (req, res) => {
   const allSnacks = await getAllSnacks();
@@ -19,7 +40,7 @@ snacks.get("/", async (req, res) => {
 });
 
 // CREATE
-snacks.post("/", async (req, res) => {
+snacks.post("/", imgResize, async (req, res) => {
   try {
     const snack = await createSnack(req.body);
     res.status(201).json(snack);
@@ -29,7 +50,7 @@ snacks.post("/", async (req, res) => {
 });
 
 // UPDATE
-snacks.put("/:id", async (req, res) => {
+snacks.put("/:id", imgResize, async (req, res) => {
   const { id } = req.params;
   try {
     const snack = await updateSnack(id, req.body);
